@@ -38,7 +38,7 @@ def sumSegment(a: Array[Int], p: Double, s: Int, t: Int): Int = {
 * t − s loop iterations
 * a constant amount of work in each iteration
 
-### Example 2: Recursive function
+### Example 2: Sequential Recursive function
 
 ```scala
 def segmentRec(a: Array[Int], p: Double, s: Int, t: Int) = {
@@ -58,3 +58,39 @@ we can construct a tree to find the time bound:
 W(s,t) =  c1(t − s) + c2,             if t − s < threshold
           W(s, m) + W(m,t) + c3       otherwise, for m = ⌊(s + t)/2⌋
 ```
+The instructor then simplifies the above to:
+```
+W(s,t) is in O(t − s). 
+```
+Thus the Sequential segmentRec is linear in `t − s`.
+
+### Example 3: Parallel Recursive function
+
+Same as the above code, except the `parallel()` method is used to get (`sum1`,`sum2`).
+
+```scala
+def segmentRec(a: Array[Int], p: Double, s: Int, t: Int) = {
+  if (t - s < threshold) {
+    sumSegment(a, p, s, t)
+  } else {
+    val m = s + (t - s)/2
+    val (sum1, sum2)= parallel(segmentRec(a, p, s, m), segmentRec(a, p, m, t))
+    sum1 + sum2 
+  } 
+}
+```
+**Answer**:
+![recursive_function_parallel_analysis](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/recursive_function_parallel_analysis.png)
+```scala
+D(s,t) = c1(t − s) + c2,               if t − s < threshold
+         max(D(s, m), D(m,t)) + c3     otherwise, for m = ⌊(s + t)/2⌋
+```
+The instructor then simplifies the above to:
+```
+O(N)       // N is the depth of the tree
+```
+This in turn gives us:
+```
+O(log(t-s))
+```
+Thus the parallel solution is much faster as it gives us logarithmic time as opposed to linear time in case of sequential solution.
