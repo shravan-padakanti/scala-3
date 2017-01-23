@@ -65,12 +65,10 @@ Atomicity is achieved by using the `synchronized` block. This block must be invo
 Example: The above example can be modified so that the print operations are atomic as below:
 ```scala
 class HelloThread extends Thread {
-
   private val x = new AnyRef {}
   override def run() = x.synchronized {
     println("Hello")
     println("World")
   }
-
 }
 ```
