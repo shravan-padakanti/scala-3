@@ -28,6 +28,7 @@ Parallelism manifests itself at different granularity levels.
 
 * **bit-level parallelism** – processing multiple bits of data in parallel. (64 bit architecture, 64 bits are processed simultaneously.
 * **instruction-level parallelism** – executing different instructions from the same instruction stream in parallel. Eg. In the below example, instructions b and c can be executed in parallel.
+
     ```
     val b = a1 + a2
     val c = a3 + a4
