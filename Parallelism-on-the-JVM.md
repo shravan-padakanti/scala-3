@@ -62,16 +62,15 @@ An operation is atomic if it appears as if it occurred instantaneously from the 
 
 Atomicity is achieved by using the `synchronized` block. This block must be invoked on instance of some object. Code inside this block is never executed by 2 threads at the same time. JVM ensures this by something called as a **monitor** in each object. Atmost 1 thread can own a monitor at one time.
 
-Example: 
+Example: The above example can be modified so that the print operations are atomic as below:
 ```scala
-private val x = new AnyRef{}
-def hw = x.synchronized {
+class HelloThread extends Thread {
+
+  private val x = new AnyRef {}
+  override def run() = x.synchronized {
     println("Hello")
     println("World")
-}
-class HelloThread extends Thread {
-    override def run() {
-        hw
-    }
+  }
+
 }
 ```
