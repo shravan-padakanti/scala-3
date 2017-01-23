@@ -152,10 +152,10 @@ b1*log(t − s) + b2 + (b3(t − s) + b4)/P
 
 Suppose that we have two parts of a sequential computation:
 
-* part1 takes fraction f of the computation time (e.g. 40%)
-* part2 take the remaining 1 − f fraction of time (e.g. 60%) and we can speed it up
+* part1 takes fraction `f` of the computation time (e.g. 40%)
+* part2 take the remaining `1 − f` fraction of time (e.g. 60%) and we can speed it up
 
-If we make part2 P times faster the speedup is
+If we make part2 `P` times faster, the speedup is
 ```
 1/(f + (1 − f)/P)
 ```
