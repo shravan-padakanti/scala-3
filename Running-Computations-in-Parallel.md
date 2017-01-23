@@ -57,5 +57,5 @@ def pNormRec(a: Array[Int], p: Double): Int = {
 def parallel[A, B](taskA: => A, taskB: => B): (A, B) = { ... }
 ```
 * returns the same value as given
-* benefit: `parallel(a,b)` can be faster than `(a,b)`
-* it takes its arguments as `call by name`, indicated with `=> A` and `=> B` so that both computations are not calculated before hand, which will happen if we use `call by value` here instead. 
+* Benefit: `parallel(a,b)` can be faster than `(a,b)`
+* **CBN**: it takes its arguments as `call by name`, indicated with `=> A` and `=> B` so that both computations are not calculated before hand, which will happen if we use `call by value` here instead. 
