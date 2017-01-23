@@ -17,7 +17,7 @@ Each JVM process starts with a **main** thread. To start additional threads:
 1. Define a `Thread` subclass.
 2. Instantiate the subclass. Override the `run` method.
 3. Call `start` on the instance.
-4. Call `join` on the instance to block execution of the main thread and get our created thread when it finishes executing and the resume the main thread.
+4. Call `join` on the instance to block execution of the main thread whereever we want the output of the spawned thread. So wherever the `join` is called, the main thread waits until the thread to be joined completes and returns.
 
 The `Thread` subclass defines the code that the thread will execute. The same custom Thread subclass can be used to start multiple threads.
 
