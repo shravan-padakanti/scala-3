@@ -9,3 +9,10 @@
 * [Benchmarking Parallel Programs](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Benchmarking-Parallel-Programs)
 
 **Week 2**
+
+* [Parallel Sorting](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-Sorting)
+* [Data Operations and Parallel Mapping](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Operations-and-Parallel-Mapping)
+* [Parallel Fold (Reduce) Operation](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-Fold-(Reduce)-Operation)
+* [Associativity I](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Associativity-I)
+* [Associativity II](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Associativity-II)
+* [Parallel Scan (Prefix Sum) Operation](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-Scan-(Prefix-Sum)-Operation)
