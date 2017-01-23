@@ -18,16 +18,23 @@ Parallel programming is much harder than sequential programming.
 
 Parallelism and concurrency are closely related concepts.
 
-* Parallel program – uses parallel hardware to execute computation more quickly. Efficiency is its main concern.
-* Concurrent program – _may_ or _may not_ execute multiple executions at the same time. Improves modularity, responsiveness or maintainability.
+* Parallel program – uses parallel hardware to execute computation more quickly. Speedup/Efficiency is its main concern.
+Eg. Bigdata, algorithmic problems, etc like matrix multiplications, computer graphics, big data processing.
+* Concurrent program – _may_ or _may not_ execute multiple executions at the same time. Modularity, responsiveness, maintainability is the main concern. Eg. Asynchronous applications like Web Servers, User interfaces, Databases, etc.
 
 ## Parallelism Granularity
 
 Parallelism manifests itself at different granularity levels.
 
-* **bit-level parallelism** – processing multiple bits of data in parallel
-* **instruction-level parallelism** – executing different instructions from the same instruction stream in parallel
-* **task-level parallelism** – executing separate instruction streams in parallel
+* **bit-level parallelism** – processing multiple bits of data in parallel. (64 bit architecture, 64 bits are processed simultaneously.
+* **instruction-level parallelism** – executing different instructions from the same instruction stream in parallel. Eg. In the below example, instructions b and c can be executed in parallel.
+    ```
+    val b = a1 + a2
+    val c = a3 + a4
+    val d = b + c
+    ```
+* **task-level parallelism** – executing separate streams of instructions in parallel. 
+
 In this course, we focus on task-level parallelism.
 
 ## Course structure:
