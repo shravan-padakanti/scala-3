@@ -87,6 +87,7 @@ Different threads use the synchronized block to agree on unique values. The sync
     }
   }
 ```
+Here we do not want to have a single global synchronized block as it will become a bottle neck if there are many transfers occurring between different sets of accounts. Hence we use more fine grained synchronization on just the source account say A1 and target account sat A2. So the thread obtains monitors on both accounts and performs the transfer. While this is happening, another transfer A3 and A4 may execute in parallel since we are not using a global synchronized block.
 
 ### Deadlocks
 
@@ -101,10 +102,15 @@ a.transfer(b, 10)
 // thread T2
 b.transfer(a, 10)
 ```
+Here T1 acquires monitor on a and waits to acquire monitor on b. And T2 acquires monitor on b and waits to acquire monitor on a.
+
+Thus both keep on waiting forever.
 
 #### Resolving Deadlocks: 
 
 One approach is to always acquire resources in the same order. This assumes an ordering relationship on the resources.
+
+In the accounts example above, we can do this by achieving a unique id to each account, and define the ordering in the transfer based on the uid.
 
 ```scala
 val uid = getUniqueUid()
@@ -124,5 +130,5 @@ def transfer(target: Account, n: Int) = {
 
 A **Memory model** is a set of rules that describes how threads interact when accessing shared memory. The memory model for the JVM is the **Java Memory Model**.
 
-1. Two threads writing to separate locations in memory do not need synchronization.
+1. Two threads writing to separate locations in memory do not need synchronization on the writes.
 2. A thread X that calls join on another thread Y is guaranteed to observe all the writes by thread Y after join returns.
