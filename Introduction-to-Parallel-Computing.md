@@ -40,13 +40,13 @@ In this course, we focus on task-level parallelism.
 
 ## Classes of Parallel Computers
 
-* multi-core processors: contain more than one core
-* symmetric multiprocessors: contain more than 1 multi-core processors who share memory and other resources.
-* general purpose graphics processing unit: contains several cores which are invoked for special tasks when requested explicitly by the host processor.
-* field-programmable gate arrays: Core processor which can rewire themselves for a particular task.  
-* computer clusters
+1. Multi-core processors: contain more than one core
+1. Symmetric multiprocessors(SMP): contain more than 1 multi-core processors who share memory and other resources.
+1. General purpose Graphics Processing Unit(GPU): contains several cores which are invoked for special tasks when requested explicitly by the host processor.
+1. Field-programmable gate arrays: Core processor which can rewire themselves for a particular task.  
+1. Computer clusters
 
-Our focus will be programming for multi-cores and SMPs.
+Our focus will be programming for multi-cores processors and SMPs.
 
 ## Course structure:
 
