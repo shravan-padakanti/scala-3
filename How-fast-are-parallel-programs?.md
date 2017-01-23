@@ -18,7 +18,7 @@ You have previously learned how to concisely characterize behavior of sequential
 * inserting into an integer into a sorted linear list takes time `O(n)`, for list storing n integers
 * inserting into an integer into a balanced binary tree of n integers takes time `O(log n)`, for tree storing n integers.
 
-#### Example 1: Linear function
+### Example 1: Simple function
 
 Let us review these techniques by applying them to our sum segment example: Find time bound on sequential sumSegment as a function of s and t
 
@@ -33,25 +33,27 @@ def sumSegment(a: Array[Int], p: Double, s: Int, t: Int): Int = {
     sum 
 }
 ```
-**Answer:** `W(s,t) = O(t − s)`, a function of the form: `c1(t − s) + c2`.
+**Answer:** Linear bound: `W(s,t) = O(t − s)`, a function of the form: `c1(t − s) + c2`.
 
 * t − s loop iterations
 * a constant amount of work in each iteration
 
-#### Example 2: Recursive function
+### Example 2: Recursive function
+
 ```scala
 def segmentRec(a: Array[Int], p: Double, s: Int, t: Int) = {
   if (t - s < threshold) {
     sumSegment(a, p, s, t)
   } else {
-    val m= s + (t - s)/2
-    val (sum1, sum2)= (segmentRec(a, p, s, m),
-    segmentRec(a, p, m, t))
+    val m = s + (t - s)/2
+    val (sum1, sum2)= ( segmentRec(a, p, s, m), segmentRec(a, p, m, t) )
     sum1 + sum2 
   } 
 }
 ```
 **Answer**:
+we can construct a tree to find the time bound:
+![recursive_function_analysis](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/recursive_function_analysis.png)
 ```
 W(s,t) =  c1(t − s) + c2,             if t − s < threshold
           W(s, m) + W(m,t) + c3       otherwise, for m = ⌊(s + t)/2⌋
