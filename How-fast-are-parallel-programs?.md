@@ -79,8 +79,8 @@ def segmentRec(a: Array[Int], p: Double, s: Int, t: Int) = {
   } 
 }
 ```
-**Answer**:
-![recursive_function_parallel_analysis](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/recursive_function_parallel_analysis.png)
+**Answer**: We have the same tree as above, as the recursive calls are same but just in parallel:
+![recursive_function_analysis](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/recursive_function_analysis.png)
 ```scala
 D(s,t) = c1(t − s) + c2,               if t − s < threshold
          max(D(s, m), D(m,t)) + c3     otherwise, for m = ⌊(s + t)/2⌋
