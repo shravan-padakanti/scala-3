@@ -52,6 +52,7 @@ Output:
 > Hello
 > World
 > World
+```
 
 ### Atomicity
 
