@@ -59,3 +59,27 @@ def parallel[A, B](taskA: => A, taskB: => B): (A, B) = { ... }
 * returns the same value as given
 * Benefit: `parallel(a,b)` can be faster than `(a,b)`
 * **CBN**: it takes its arguments as `call by name`, indicated with `=> A` and `=> B` so that both computations are not calculated before hand, which will happen if we use `call by value` here instead. 
+
+## What happens inside a system when we use parallel?
+
+Efficient parallelism requires support from
+
+* language and libraries
+* virtual machine
+* operating system
+* hardware
+
+One implementation of `parallel` uses Java Virtual Machine threads
+
+* those typically map to operating system threads
+* operating system can schedule different threads on multiple cores
+
+Given sufficient resources, a parallel program can run faster.
+
+## Underlying Hardware Architecture Affects Performance
+
+Suppose we write a similar program as above to compute the sum of a very long array. Since the array is stored in the RAM. And that means that the time that the computation takes cannot be less than the time it takes to fetch the entire array from the memory into the processor.
+
+**Bottomline**: When considering opportunities for speed-up, we must take into account not only the number of cores, but also the parallelism available for any other shared resources that we might need in order to perform computation, like memory in the above case.  
+
+Also, suppose we are doing a `parallel(e1, e2)`, it might happen that e2 takes longer time than e1. So e1 has to wait after finishing until e2 finishes. So the minimum time required for parallel(e1,e2) is the max of time required for either e1 or e2.
