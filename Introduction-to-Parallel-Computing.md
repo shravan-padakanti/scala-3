@@ -38,6 +38,16 @@ Parallelism manifests itself at different granularity levels.
 
 In this course, we focus on task-level parallelism.
 
+## Classes of Parallel Computers
+
+* multi-core processors: contain more than one core
+* symmetric multiprocessors: contain more than 1 multi-core processors who share memory and other resources.
+* general purpose graphics processing unit: contains several cores which are invoked for special tasks when requested explicitly by the host processor.
+* field-programmable gate arrays: Core processor which can rewire themselves for a particular task.  
+* computer clusters
+
+Our focus will be programming for multi-cores and SMPs.
+
 ## Course structure:
 
 * week 1 – basics of parallel computing and parallel program analysis
