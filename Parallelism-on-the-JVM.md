@@ -54,7 +54,7 @@ Output:
 > World
 ```
 
-### Atomicity
+### Atomicity and Synchronized
 
 As seen above, separate statements in two threads can overlap since they execute in parallel. In some cases, we want to ensure that a sequence of statements in a specific thread executes at once without interruption. Eg. Withdrawing money from a bank account and updating the remaining balance.
 
@@ -72,3 +72,57 @@ class HelloThread extends Thread {
   }
 }
 ```
+
+Different threads use the synchronized block to agree on unique values. The synchronized block is an example of a **synchronization primitive**.
+
+### Composition with the synchronized block
+
+```scala
+  class Account(private var amount: Int = 0) {
+    def transfer(target: Account, n: Int) = this.synchronized {
+      target.synchronized {
+        this.amount -= n
+        target.amount += n
+      }
+    }
+  }
+```
+
+### Deadlocks
+
+Deadlock is a scenario in which two or more threads compete for resources (such as monitor ownership), and wait for each to finish without releasing the already acquired resources.
+
+```scala
+val a = new Account(50)
+val b = new Account(70)
+
+// thread T1
+a.transfer(b, 10)
+// thread T2
+b.transfer(a, 10)
+```
+
+#### Resolving Deadlocks: 
+
+One approach is to always acquire resources in the same order. This assumes an ordering relationship on the resources.
+
+```scala
+val uid = getUniqueUid()
+private def lockAndTransfer(target: Account, n: Int) = this.synchronized {
+  target.synchronized {
+    this.amount -= n
+    target.amount += n
+  }
+}
+def transfer(target: Account, n: Int) = {
+  if (this.uid < target.uid) this.lockAndTransfer(target, n)
+  else target.lockAndTransfer(this, -n)
+}
+```
+
+## Java Memory model
+
+A **Memory model** is a set of rules that describes how threads interact when accessing shared memory. The memory model for the JVM is the **Java Memory Model**.
+
+1. Two threads writing to separate locations in memory do not need synchronization.
+2. A thread X that calls join on another thread Y is guaranteed to observe all the writes by thread Y after join returns.
