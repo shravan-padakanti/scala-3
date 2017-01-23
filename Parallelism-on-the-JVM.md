@@ -73,7 +73,7 @@ class HelloThread extends Thread {
 }
 ```
 
-Different threads use the synchronized block to agree on unique values. The synchronized block is an example of a **synchronization primitive**.
+Different threads use the synchronized block to agree on unique values. The synchronized block is an example of a **synchronization primitive**, a construct which allows thread to safely exchange information.
 
 ### Composition with the synchronized block
 
