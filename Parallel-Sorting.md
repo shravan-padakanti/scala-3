@@ -14,7 +14,7 @@ The running time is `O(n)`.
 
 We will implement a **parallel merge sort** algorithm.
 
-1. recursively sort the two halves of the array in parallel
+1. recursively sort the two halves of the array in **parallel**
 2. sequentially merge the two array halves by copying into a temporary array
 3. copy the temporary array back into the original array
 
@@ -32,18 +32,18 @@ We start by allocating an intermediate array:
 val ys = new Array[Int](xs.length)
 ```
 
-At each level of the merge sort, we will alternate between the source array `xs` and the intermediate array `ys`.
+At each level of the merge sort, we will alternate between the source array `xs` and the intermediate array `ys` for effeciency.
 
 ### Sorting the Array
 
 ```scala
 def sort(from: Int, until: Int, depth: Int): Unit = {
     if (depth == maxDepth) {
-        quickSort(xs, from, until - from)
+        quickSort(xs, from, until - from)  // Base Case (no need to do the parallelization anymore)
     } else {
         val mid = (from + until) / 2
         parallel(sort(mid, until, depth + 1), sort(from, mid, depth + 1))
-        val flip = (maxDepth - depth) % 2 == 0
+        val flip = (maxDepth - depth) % 2 == 0 // even or odd, flip is used to switch between xs and ys
         val src = if (flip) ys else xs
         val dst = if (flip) xs else ys
         merge(src, dst, from, mid, until)
