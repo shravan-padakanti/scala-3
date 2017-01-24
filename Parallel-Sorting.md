@@ -59,5 +59,21 @@ Given an array `src` consisting of two sorted intervals, merge those interval in
 def merge(src: Array[Int], dst: Array[Int], from: Int, mid: Int, until: Int): Unit
 ```
 
-The merge implementation is sequential, so we will not go through it.
+The merge implementation is sequential, so we will not go through it. How would you implement merge in parallel?
 
+### Copying the Array
+
+```scala
+def copy(src: Array[Int], target: Array[Int], from: Int, until: Int, depth: Int): Unit = {
+  if (depth == maxDepth) {
+    Array.copy(src, from, target, from, until - from)
+  } else {
+    val mid = (from + until) / 2
+    val right = parallel(
+      copy(src, target, mid, until, depth + 1),
+      copy(src, target, from, mid, depth + 1)
+    )
+  }
+}
+if (maxDepth % 2 == 0) copy(ys, xs, 0, xs.length, 0)
+```
