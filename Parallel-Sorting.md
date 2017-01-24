@@ -78,4 +78,4 @@ def copy(src: Array[Int], target: Array[Int], from: Int, until: Int, depth: Int)
 if (maxDepth % 2 == 0) copy(ys, xs, 0, xs.length, 0)
 ```
 
-Full Source: https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/source/Parallel_MergeSort.pdf
+> Full Source: https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/source/Parallel_MergeSort.pdf
