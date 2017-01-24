@@ -92,7 +92,7 @@ val time = withWarmer(new Warmer.Default) measure {
     (0 until 1000000).toArray
 }
 ```
-when we measure running times with this, we get more consistent and close run-times.
+when we measure running times with this, we get more consistent and close run-times. ** So we used these time, i.e. the time required by a program to exeute after warming to compare between the parallel and sequential version of a program**.
 
 ### ScalaMeter Configuration
 ScalaMeter configuration clause allows specifying various parameters, such as the minimum and maximum number of warmup runs. If we are not satisfied  with the default configuration provided by ScalaMeter, then we can change them as below:
