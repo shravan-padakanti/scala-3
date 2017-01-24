@@ -79,3 +79,7 @@ def parallelWrong[A, B](cA: => A, cB: => B): (A, B) = {
 }
 ```
 Here `join` is called on `tb` where we are creating the task to be executed in parallel. So first we wait until `tb` is calculated. Then we calculated `ta`. So we are not doing these tasks in parallel.
+
+### Full Source
+
+Here is the source of the parallel package that will be used in assignments: https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/source/package-parallel.pdf
