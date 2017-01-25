@@ -74,6 +74,41 @@ We would like a version that parallelizes:
 * computations of `f(h)` for different elements `h`
 * finding the elements themselves (list is not a good choice)
 
+### Sequential map of an array producing an array
 
+```scala
+def mapASegSeq[A,B](inp: Array[A], left: Int, right: Int, f : A => B, out: Array[B]) = {
+  // Writes to out(i) for left <= i <= right-1
+  var i= left
+  while (i < right) {
+    out(i)= f(inp(i))
+    i= i+1
+  } 
+}
+val in= Array(2,3,4,5,6)
+val out= Array(0,0,0,0,0)
+val f= (x:Int) => x*x
+mapASegSeq(in, 1, 3, f, out)
+out
+res1: Array[Int] = Array(0, 9, 16, 0, 0)
+```
+
+### Parallel map of an array producing an array
+```scala
+def mapASegPar[A,B](inp: Array[A], left: Int, right: Int, f : A => B, out: Array[B]): Unit = {
+  // Writes to out(i) for left <= i <= right-1
+  if (right - left < threshold)
+  mapASegSeq(inp, left, right, f, out)
+  else {
+    val mid = left + (right - left)/2
+    parallel(mapASegPar(inp, left, mid, f, out),
+    mapASegPar(inp, mid, right, f, out))
+  }
+}
+```
+**Note:**
+
+* writes need to be disjoint (otherwise: non-deterministic behavior)
+* threshold needs to be large enough (otherwise we lose efficiency)
 
 
