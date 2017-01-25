@@ -1,1 +1,0 @@
-Parallel Fold (Reduce) Operation
