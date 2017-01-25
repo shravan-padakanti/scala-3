@@ -123,7 +123,7 @@ mapASegPar(inp, 0, inp.length, f, out) // parallel
 1. are there performance gains from parallel execution
 2. performance of re-using higher-order functions vs re-implementing
 
-### Sequential pointwise exponent written from scratch
+#### Sequential pointwise exponent written from scratch
 
 Here we use the power function directly in order to address "performance of re-using higher-order functions vs re-implementing"
 ```scala
@@ -136,7 +136,7 @@ def normsOf(inp: Array[Int], p: Double, left: Int, right: Int, out: Array[Double
 }
 ```
 
-### Parallel pointwise exponent written from scratch
+#### Parallel pointwise exponent written from scratch
 
 ```scala
 def normsOfPar(inp: Array[Int], p: Double, left: Int, right: Int, out: Array[Double]): Unit = {
@@ -153,7 +153,7 @@ def normsOfPar(inp: Array[Int], p: Double, left: Int, right: Int, out: Array[Dou
 }
 ```
 
-### Observations using ScalaMeter
+## Observations using ScalaMeter
 
 * Parallelization pays off
 * Manually removing higher-order functions does not pay of (wrt to the effort/complexity and the negligible speedup gained)
@@ -204,7 +204,7 @@ Give a correct but as tight as possible asymptotic parallel computation depth bo
 ```
 **Answer**: h. The computation depth equals the height of the tree
 
-### Comparison of arrays and immutable trees
+## Comparison of arrays and immutable trees
 
 **Arrays:**
 
