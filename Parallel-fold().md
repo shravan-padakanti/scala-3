@@ -13,7 +13,7 @@ To enable parallel operations, we look at associative operations
 
 * addition, string concatenation (but not minus)
 
-### Associative operation
+## Associative operation
 
 Operation `f: (A,A) => A` is associative _iff_ for every x, y, z: 
 ```
@@ -90,3 +90,81 @@ def reduce[A](t: Tree[A], f : (A,A) => A): A = t match {
 **Question**: What is the depth complexity of such reduce?
 
 **Answer**: height of the tree
+
+## Associativity stated as tree reduction
+
+How can we restate associativity of such trees?
+
+![associativity_trees_2](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/associativity_trees_2.png)
+
+If f denotes ⊕, in Scala we can write this also as:
+```scala
+reduce(Node(Leaf(x), Node(Leaf(y), Leaf(z))), f) == reduce(Node(Node(Leaf(x), Leaf(y)), Leaf(z)), f)
+```
+
+### Order of elements in a tree
+
+We can convert a tree into a list in order to describe the ordering of elements of a tree:
+```scala
+def toList[A](t: Tree[A]): List[A] = t match {
+    case Leaf(v) => List(v)
+    case Node(l, r) => toList[A](l) ++ toList[A](r) 
+}
+```
+Suppose we also have tree map:
+```scala
+def map[A,B](t: Tree[A], f : A => B): Tree[B] = t match {
+    case Leaf(v) => Leaf(f(v))
+    case Node(l, r) => Node(map[A,B](l, f), map[A,B](r, f)) 
+}
+```
+Can you express toList using map and reduce?
+```scala
+toList(t) == reduce(map(t, List(_)), _ ++ _)
+```
+
+### Consequence stated as tree reduction
+
+Now that we have an idea about the ordering of the tree, we can see the consequence of the tree reduction: consider two expressions with same list of operands connected with ⊗, but different parentheses. Then these expressions evaluate to the same result. 
+
+Express this consequence in Scala using functions we have defined so far: Consequence (Scala): if function `f : (A, A) => A` is associative, and we have 2 trees `t1:Tree[A]` and `t2:Tree[A]`, mapped to the same list of elements such that `toList(t1) == toList(t2)`, then: `reduce(t1, f)==reduce(t2, f)`
+
+**Explanation**:
+
+Intuition: given a tree, use tree rotation until it becomes list-like.
+
+![associativity_trees_3](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/associativity_trees_3.png)
+
+Applying rotation to tree preserves `toList` as well as the value of `reduce`.
+
+`toList(t1)==toList(t2)` ===> rotations can bring `t1`, `t2` to be the same tree.
+
+### Towards reduction for arrays
+
+We have seen reduction on trees. Often we work with collections where we only know the ordering and not
+the tree structure. How can we do reduction in case of, e.g., arrays?
+
+* convert it into a balanced tree
+* do tree reduction
+
+Because of associativity, we can choose any tree that preserves the order of elements of the original collection Tree reduction replaces Node constructor with `f`, so we can just use `f` directly instead of building tree nodes.
+
+When the segment is small, it is faster to process it sequentially.
+
+Here is an implementation of parallel array reduce:
+
+```scala
+
+def reduceSeg[A](inp: Array[A], left: Int, right: Int, f: (A,A) => A): A = {
+  if (right - left < threshold) {
+    var res= inp(left); var i= left+1
+    while (i < right) { res= f(res, inp(i)); i= i+1 }
+    res
+  } else {
+    val mid = left + (right - left)/2
+    val (a1,a2) = parallel(reduceSeg(inp, left, mid, f), reduceSeg(inp, mid, right, f))
+    f(a1,a2)
+  }
+}
+def reduce[A](inp: Array[A], f: (A,A) => A): A = reduceSeg(inp, 0, inp.length, f)
+```
