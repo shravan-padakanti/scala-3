@@ -135,8 +135,8 @@ Intuition: given a tree, use tree rotation until it becomes list-like.
 
 ![associativity_trees_3](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/associativity_trees_3.png)
 
-Line 1. `(x ⊕ y) ⊕ z == x ⊕ (y ⊕ z)`
-Line 2. `(x ⊕ y) ⊕ (p ⊕ q) == (x ⊕ (y ⊕ (p ⊕ q)))`
+* Line 1. `(x ⊕ y) ⊕ z == x ⊕ (y ⊕ z)`
+* Line 2. `(x ⊕ y) ⊕ (p ⊕ q) == (x ⊕ (y ⊕ (p ⊕ q)))`
 
 Applying rotation to tree preserves `toList` as well as the value of `reduce`.
 
