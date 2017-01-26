@@ -127,7 +127,8 @@ case class Node[A](l: Tree[A], r: Tree[A]) extends Tree[A] {
     override val size = l.size + r.size
 }
 ```
-Assume that our trees are balanced: we can explore branches in parallel
+Assume that our trees are balanced: we can explore branches in parallel.
+> The tree is only balanced if: The left and right subtrees' heights differ by at most one, AND The left subtree is balanced, AND The right subtree is balanced
 
 ```scala
 def mapTreePar[A:Manifest,B:Manifest](t: Tree[A], f: A => B) : Tree[B] = t match {
