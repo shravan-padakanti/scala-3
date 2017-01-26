@@ -1,17 +1,18 @@
 We have already seen the definition of Associativity in the [previous lecture.](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-fold()#associative-operation).
 
 The consequence was: 
+
 1. Two expressions with same list of operands connected with ⊗, but different parentheses evaluate to the same result ([here](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-fold()#associative-operation))
-2. Reduce on any tree with this list of operands gives the same result (https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-fold()#consequence-stated-as-tree-reduction)
+2. Reduce on any tree with this list of operands gives the same result ([here](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-fold()#consequence-stated-as-tree-reduction))
 
 ## Commutativity
 
-Operation `f: (A,A) => A` is commutative _iff_ for every `x, y: f(x, y) = f(y, x)`
+Operation `f: (A, A) => A` is commutative _iff_ for every `x, y: f(x, y) = f(y, x)`
 
 * There are operations that are associative but not commutative
 * There are operations that are commutative but not associative
 
-For correctness of reduce, we need (just) associativity.
+**For correctness of `reduce`, we need (just) associativity.**
 
 #### Examples of operations that are both associative and commutative
 
@@ -26,6 +27,14 @@ For correctness of reduce, we need (just) associativity.
 
 #### using sum: array norm
 
+[Previously](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Running-Computations-in-Parallel#example-computing-p-norm) we have seen the p-norm. So if we want to compute the p-norm of an array, which combination of operations (like `map`, `fold`, `reduce` that we have seen) does sum of powers correspond to?
+
+Answer:  do a `map` followed by a `reduce`.
+```scala
+redce(map(a, power(abs(_), p)), _ + __
+```
+Here `+` is the associateive peration of `reduce`. `map` can be combined with `reduce` directly as above to avoid intermediate collections that would be created if we just do a map and thus avoid unnecessary allocations.
+
 #### Examples of operations that are associative but not commutative
 
 * concatenation (append) of lists: (x ++ y) ++ z == x ++ (y ++ z)
@@ -38,14 +47,14 @@ Because they are associative, reduce still gives the same result
 
 #### Examples of operations are commutative but not associative
 
-This function is also commutative:  `f(x, y) = x^2 + y^2`
+This function is commutative but not associative:  `f(x, y) = x^2 + y^2`
 
 Indeed in this case, `f(x, y) = x(y, x)`, But:
 ```
 f(f(x, y), z) = (x^2 + y^2)^2 + z^2
 f(x, f(y, z)) = x^2 + (y^2 + z^2)^2
 ```
-These are polynomials of different growth rates with respect to different variables and are easily seen to be different for many x, y, z.
+These are polynomials of different growth rates with respect to different variables and are easily seen to be different for many `x, y, z`.
 
 Proving commutativity alone does not prove associativity and does not guarantee that the result of reduce is the same as e.g. `reduceLeft` and `reduceRight`.
 
@@ -101,8 +110,8 @@ Then this operation is commutative:
 ```
 def f(x: A, y: A) = if (less(y,x)) g(y,x) else g(x,y)
 ```
-
 Here `f(x,y)==f(y,x)` because:
+
 * if `x==y` then both sides equal `g(x,x)`
 * if `less(y,x)` then left sides is `g(y,x)` and it is not `less(x,y)` so right side is also `g(y,x)`
 * if `less(x,y)` then it is not `less(y,x)` so left sides is `g(x,y)` and right side is also `g(x,y)`
