@@ -142,7 +142,7 @@ Applying rotation to tree preserves `toList` as well as the value of `reduce`.
 ### Towards reduction for arrays
 
 We have seen reduction on trees. Often we work with collections where we only know the ordering and not
-the tree structure. How can we do reduction in case of, e.g., arrays?
+the tree structure. How can we do reduction in case of, e.g., arrays, where a tree structure is not immediately visible. 
 
 * convert it into a balanced tree
 * do tree reduction
@@ -156,13 +156,13 @@ Here is an implementation of parallel array reduce:
 ```scala
 
 def reduceSeg[A](inp: Array[A], left: Int, right: Int, f: (A,A) => A): A = {
-  if (right - left < threshold) {
+  if (right - left < threshold) {  // Base case that is handled sequentially
     var res= inp(left); var i= left+1
     while (i < right) { res= f(res, inp(i)); i= i+1 }
     res
   } else {
     val mid = left + (right - left)/2
-    val (a1,a2) = parallel(reduceSeg(inp, left, mid, f), reduceSeg(inp, mid, right, f))
+    val (a1,a2) = parallel(reduceSeg(inp, left, mid, f), reduceSeg(inp, mid, right, f)) // <- parallel recursive
     f(a1,a2)
   }
 }
