@@ -77,11 +77,12 @@ def res = reduce[Int](tree, fMinus) // 6
 
 How to make that tree reduce parallel?
 
+We just use the `parallel` function to reduce left and the right branches parallely.
 ```scala
 def reduce[A](t: Tree[A], f : (A,A) => A): A = t match {
     case Leaf(v) => v
     case Node(l, r) => {
-        val (lV, rV) = parallel(reduce[A](l, f), reduce[A](r, f))
+        val (lV, rV) = parallel(reduce[A](l, f), reduce[A](r, f)) // <----
         f(lV, rV)
     }
 }
