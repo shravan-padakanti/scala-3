@@ -150,3 +150,126 @@ def upsweep[A](t: Tree[A], f: (A,A) => A): TreeRes[A] = t match {
     }
 }
 ```
+
+### Using tree with results to create the final collection
+
+```
+       *
+     / 62 \
+   *        *            Next: a tree for 100, 101, 104, 112, 162
+  /4\      /58\    
+ 1   3    8   50
+
+// ’a0’ is reduce of all elements left of the tree ’t’
+def downsweep[A](t: TreeRes[A], a0: A, f : (A,A) => A): Tree[A] = t match {
+    case LeafRes(a) => Leaf(f(a0, a))
+    case NodeRes(l, _, r) => {
+        val (tL, tR) = parallel(downsweep[A](l, a0, f),
+        downsweep[A](r, f(a0, l.res), f))
+        Node(tL, tR) 
+    } 
+}
+scala> downsweep(res0, 100, plus)
+res1: Tree[Int] = Node(Node(Leaf(101),Leaf(104)),Node(Leaf(112),Leaf(162)))
+```
+
+### scanLeft on trees
+```scala
+def scanLeft[A](t: Tree[A], a0: A, f: (A,A) => A): Tree[A] = {
+    val tRes = upsweep(t, f)
+    val scan1 = downsweep(tRes, a0, f)
+    prepend(a0, scan1)
+}
+```
+Define prepend.
+```scala
+def prepend[A](x: A, t: Tree[A]): Tree[A] = t match {
+    case Leaf(v) => Node(Leaf(x), Leaf(v))
+    case Node(l, r) => Node(prepend(x, l), r)
+}
+```
+
+### scanLeft and arrays
+Previous definition on trees is good for understanding
+
+As with map and reduce, to make it more efficient, we use trees that have arrays in leaves instead of individual elements.
+
+**Exercise**: define scanLeft on trees with such large leaves, using sequential scan left in the leaves.
+
+**Next step**: parallel scan when the entire collection is an array
+
+* we will still need to construct the intermediate tree
+
+#### Intermediate tree for array reduce
+
+```scala
+sealed abstract class TreeResA[A] { 
+    val res: A 
+}
+case class Leaf[A](from: Int, to: Int, override val res: A) extends TreeResA[A]
+case class Node[A](l: TreeResA[A], override val res: A, r: TreeResA[A]) extends TreeResA[A]
+```
+The only difference compared to previous TreeRes: each Leaf now keeps track of the array segment range (from, to) from which `res` is computed. We do not keep track of the array elements in the Leaf itself; we instead
+pass around a reference to the input array.
+
+#### Upsweep on array
+
+Starts from an array, produces a tree:
+```scala
+def upsweep[A](inp: Array[A], from: Int, to: Int, f: (A,A) => A): TreeResA[A] = {
+    if (to - from < threshold) Leaf(from, to, reduceSeg1(inp, from + 1, to, inp(from), f))
+    else {
+        val mid = from + (to - from)/2
+        val (tL,tR) = parallel(upsweep(inp, from, mid, f),
+        upsweep(inp, mid, to, f))
+        Node(tL, f(tL.res,tR.res), tR)
+    }
+}
+```
+Sequential reduce for segment
+```scala
+def reduceSeg1[A](inp: Array[A], left: Int, right: Int, a0: A, f: (A,A) => A): A = {
+    var a = a0
+    var i = left
+    while (i < right) {
+        a = f(a, inp(i))
+        i = i+1
+    }
+    a
+}
+```
+
+#### Downsweep on array
+```scala
+def downsweep[A](inp: Array[A], a0: A, f: (A,A) => A, t: TreeResA[A], out: Array[A]): Unit = t match {
+    case Leaf(from, to, res) => scanLeftSeg(inp, from, to, a0, f, out)
+    case Node(l, _, r) => {
+        val (_,_) = parallel(downsweep(inp, a0, f, l, out), downsweep(inp, f(a0,l.res), f, r, out))
+    }
+}
+```
+
+#### Sequential scan left on segment
+Writes to output shifted by one.
+```scala
+def scanLeftSeg[A](inp: Array[A], left: Int, right: Int, a0: A, f: (A,A) => A, out: Array[A]) = {
+    if (left < right) {
+        var i = left
+        var a = a0
+        while (i < right) {
+            a = f(a,inp(i))
+            i = i+1
+            out(i) = a
+        }
+    }
+}
+```
+
+### Finally: parallel scan on the array
+```
+def scanLeft[A](inp: Array[A], a0: A, f: (A,A) => A, out: Array[A]) = {
+    val t = upsweep(inp, 0, inp.length, f)
+    downsweep(inp, a0, f, t, out) // fills out[1..inp.length]
+    out(0)= a0 // prepends a0
+}
+```
