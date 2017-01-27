@@ -30,7 +30,7 @@ Consequence: consider two expressions with same list of operands connected with 
 (x ⊗ y) ⊗ (z ⊗ w) = (x ⊗ (y ⊗ z)) ⊗ w = ((x ⊗ y) ⊗ z) ⊗ w
 ```
 
-**Thus, Associativity is important for parallelization as it enables parallelization. Since `((x ⊗ y) ⊗ z) ⊗ w =  (x ⊗ y) ⊗ (z ⊗ w)`, the operations on the RHS in the parenthesis can be executed parallely**
+**Thus, Associativity is important for parallelization as it enables parallelization. Since `((x ⊗ y) ⊗ z) ⊗ w =  (x ⊗ y) ⊗ (z ⊗ w)`, the operations on the RHS in the parenthesis can be executed parallelly. Also Note: some operations which are associative usually cease to be associative when performed using floating point numbers.**
 
 ### Trees instead of expressions
 
