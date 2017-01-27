@@ -46,16 +46,63 @@ sum/length
 
 ## Associativity through symmetry and commutativity
 
-As we know, commutativity of `f` alone does not imply associativity. But it does implu it if we have an additional property. Define:
+As we know, commutativity of `f` alone does not imply associativity. But we can imply it if we have an additional property. Define:
 ```
 E(x,y,z) = f(f(x,y), z)
 ```
-We say arguments of E can rotate if `E(x,y,z) = E(y,z,x)`, that is:
+We say arguments of E can rotate if `E(x,y,z) = E(y,z,x)` ( rotates anti clockwise ), that is: 
 ```
 f(f(x,y), z) = f(f(y,z), x)
 ```
-**Claim**: if f is commutative and arguments of E can rotate then f is also associative.
+**Claim**: if `f` is commutative **and** arguments of E can rotate then f is also associative.
 
 **Proof**: `f(f(x,y), z) = f(f(y,z), x) = f(x, f(y,z))`
+
+#### Example: addition of modular fractions
+```
+plus((x1,y1), (x2, y2)) = (x1*y2 + x2*y1, y1*y2)
+```
+where * and + are all modulo some base (e.g. 2^32).
+We can have overflows in both numerator and denominator. Is such plus associative?
+
+Observe that plus is commutative. 
+
+Moreover:
+```
+E((x1,y1), (x2,y2), (x3,y3)) == 
+plus(plus((x1,y1), (x2,y2)), (x3,y3)) ==
+plus((x1*y2 + x2*y1, y1*y2), (x3,y3)) == 
+((x1*y2 + x2*y1)*y3 + x3*y1*y2, y1*y2*y3) ==
+(x1*y2*y3 + x2*y1*y3 + x3*y1*y2, y1*y2*y3)
+```
+Therefore
+```
+E((x2,y2), (x3,y3), (x1,y1)) == (x2*y3*y1 + x3*y2*y1 + x1*y2*y3, y2*y3*y1)
+```
+which is the same. By previous claim, plus is associative.
+
+#### Example: relativistic velocity addition
+
+Let `u, v` range over rational numbers in the open interval `(−1, 1)`. Define `f` to add velocities according to special relativity:
+```
+f(u, v) = (u + v)/(1 + uv)
+```
+Clearly, f is commutative: f(u, v) = f(v, u).
+
+f(f(u, v),w) = ((u+v)/(1+uv) + w)/(1 + (u+v)w/(1+uv))
+             = (u + v + w + uvw)/(1 + uv + uw + vw)
+```
+We can rotate arguments `u,v,w`.
+
+If we implement the `f(u, v) = (u + v)/(1 + uv)` using g floating point numbers, then the operation is not associative.
+
+Even though the difference between `f(x, f(y, z))` and `f(f(x, y), z)` is small in one step, over many steps it accumulates, so the result of the reduceLeft and a reduce may differ substantially.
+
+## A family of associative operations on sets
+
+A function including intersection of sets is show to be associative.
+
+
+
 
 
