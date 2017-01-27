@@ -88,15 +88,17 @@ Let `u, v` range over rational numbers in the open interval `(−1, 1)`. Define 
 f(u, v) = (u + v)/(1 + uv)
 ```
 Clearly, f is commutative: f(u, v) = f(v, u).
-
+```
 f(f(u, v),w) = ((u+v)/(1+uv) + w)/(1 + (u+v)w/(1+uv))
              = (u + v + w + uvw)/(1 + uv + uw + vw)
 ```
 We can rotate arguments `u,v,w`.
 
-If we implement the `f(u, v) = (u + v)/(1 + uv)` using g floating point numbers, then the operation is not associative.
+If we implement the `f(u, v) = (u + v)/(1 + uv)` using `g` **floating point numbers**, then the operation is not associative.
 
 Even though the difference between `f(x, f(y, z))` and `f(f(x, y), z)` is small in one step, over many steps it accumulates, so the result of the reduceLeft and a reduce may differ substantially.
+
+**Note: Thus some operations which are associative usually cease to be associative when performed using floating point numbers.**
 
 ## A family of associative operations on sets
 
