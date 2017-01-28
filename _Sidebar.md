@@ -17,3 +17,11 @@
 * [Associativity I](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Associativity-I)
 * [Associativity II](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Associativity-II)
 * [Parallel Scan (Prefix Sum) Operation](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-Scan-(Prefix-Sum)-Operation)
+
+**Week 3**
+
+* [Data Parallel Programming](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Parallel-Programming)
+* [Data Parallel Operations I](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Parallel-Operations-I)
+* [Data Parallel Operations II](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Parallel-Operations-II)
+* [Scala Parallel Collections](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Scala-Parallel-Collections)
+* [Splitters and Combiners](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners)
