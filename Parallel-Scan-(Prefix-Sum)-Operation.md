@@ -25,9 +25,11 @@ We **assume that f is assocative**, throughout this segment.
 List(1,3,8).scanLeft(100)((acc,elem) => acc + elem) == List(100, 101, 104, 112)
 List(1,3,8).scanRight(100)((acc,elem) => acc + elem) == List(112, 111, 108, 100)
 ```
-We consider only scanLeft, but scanRight is dual.
+We consider only scanLeft, but scanRight is dual i.e. everything we apply or deduce about `scanLeft` is also applicable to `scanRight`.
 
 ## Sequential scan
+
+We can generalize the above definition as:
 ```scala
 List(a1, a2, ..., aN).scanLeft(f)(a0) = List(b0, b1, b2, ..., bN)
 ```
@@ -36,7 +38,7 @@ where
 * b0 = a0 
 * bi = f(bi−1, ai) for 1 <= i <= N.
 ```
-We give a sequential definition of `scanLeft`:
+So based on this, we give a sequential definition of `scanLeft`:
 
 * take an array `inp`, an element `a0`, and binary operation `f`
 * write the output to array `out`, assuming `out.length >= inp.length + 1`
@@ -56,19 +58,19 @@ def scanLeft[A](inp: Array[A], a0: A, f: (A,A) => A, out: Array[A]): Unit = {
 
 ## Parallel scan
 
-Can scanLeft be made parallel? Assume that f is associative.
+Can scanLeft be made parallel? Assume that `f` is associative.
 
-**Goal**: an algorithm that runs in O(log n) given infinite parallelism
+**Goal**: an algorithm that runs in `O(log n)` given infinite parallelism
 
-At first, the task seems impossible; it seems that:
+At first, the task seems impossible because:
 * the value of the last element in sequence depends on all previous ones
 * need to wait on all previous partial results to be computed first
-* such approach gives O(n) even with infinite parallelism
+* such approach gives `O(n)` even with infinite parallelism
 
-**Idea**: give up on reusing all intermediate results
+**Idea**: Since by definition `scanLeft` is sequential, i.e. the next element depends on the previous element we have to give up on reusing all intermediate results
 
-* do more work (more f applications)
-* improve parallelism, more than compensate for recomputation
+* do more work (we apply the function `f` more times than usual)
+* improve parallelism (more than compensation for recomputation that we do for `f`)
 
 ### High-level Approach: express scan using map and reduce
 
@@ -81,7 +83,17 @@ def mapSeg[A,B](inp: Array[A], left: Int, right: Int, fi : (Int,A) => B, out: Ar
 
 ### High-Level Solution
 
-According to definition, element on position i is the reduce of the previous elements.
+We use `map` and `reduce` of which we have already seen parallel implementations.
+
+`inp` is the input array, and we use the `map` and `reduce` functions on segments of the array:
+
+```scala
+def reduceSeg1[A](inp: Array[A], left: Int, right: Int, a0: Int, f: (A,A) => A): A
+
+def mapSeg[A,B](inp: Array[A], left: Int, right: Int, fi : (Int,A) => B, out: Array[B]): Unit
+```
+
+According to definition, element on position `i` is the `reduce` of the previous elements.
 We thus map the array with a function defined using reduce:
 ```scala
 def scanLeft[A](inp: Array[A], a0: A, f: (A,A) => A, out: Array[A]) = {
@@ -95,7 +107,7 @@ Map always gives as many elements as the input, so we additionally compute the l
 
 ### Reusing intermediate results of reduce
 
-In the previous solution we do not reuse any computation. Can we reuse some of it?
+In the previous solution we do not reuse any computation. Each output array was computed independently of others. Can we reuse some of it?
 
 Recall that reduce proceeds by applying the operations in a tree
 
@@ -116,6 +128,8 @@ case class LeafRes[A](override val res: A) extends TreeRes[A]
 case class NodeRes[A](l: TreeRes[A], override val res: A, r: TreeRes[A]) extends TreeRes[A]
 ```
 
+Can you define reduceRes function that transforms `Tree` into `TreeRes`?
+
 #### Reduce that preserves the computation tree
 
 ```scala
@@ -135,7 +149,7 @@ def reduceRes[A](t: Tree[A], f: (A,A) => A): TreeRes[A] = t match {
 
 val t1 = Node(Node(Leaf(1), Leaf(3)), Node(Leaf(8), Leaf(50)))
 val plus = (x:Int,y:Int) => x+y
-scala> reduceRes(t1, plus)
+scala> reduceRes(t1, plus) 
 res0: TreeRes[Int] = NodeRes(NodeRes(LeafRes(1),4,LeafRes(3)), 62, NodeRes(LeafRes(8),58,LeafRes(50)))
 ```
 
@@ -208,19 +222,17 @@ sealed abstract class TreeResA[A] {
 case class Leaf[A](from: Int, to: Int, override val res: A) extends TreeResA[A]
 case class Node[A](l: TreeResA[A], override val res: A, r: TreeResA[A]) extends TreeResA[A]
 ```
-The only difference compared to previous TreeRes: each Leaf now keeps track of the array segment range (from, to) from which `res` is computed. We do not keep track of the array elements in the Leaf itself; we instead
-pass around a reference to the input array.
+The only difference compared to previous `TreeRes` is: each `Leaf` now keeps track of the array segment range (from, to) from which `res` is computed. We do not keep track of the array elements in the Leaf itself; we instead pass around a reference to the input array.
 
 #### Upsweep on array
 
 Starts from an array, produces a tree:
 ```scala
 def upsweep[A](inp: Array[A], from: Int, to: Int, f: (A,A) => A): TreeResA[A] = {
-    if (to - from < threshold) Leaf(from, to, reduceSeg1(inp, from + 1, to, inp(from), f))
-    else {
+    if (to - from < threshold) Leaf(from, to, reduceSeg1(inp, from + 1, to, inp(from), f)) // Base case for small segment where we don't need to use parallelism
+    else { // parallel case
         val mid = from + (to - from)/2
-        val (tL,tR) = parallel(upsweep(inp, from, mid, f),
-        upsweep(inp, mid, to, f))
+        val (tL,tR) = parallel(upsweep(inp, from, mid, f), upsweep(inp, mid, to, f))
         Node(tL, f(tL.res,tR.res), tR)
     }
 }
@@ -232,7 +244,7 @@ def reduceSeg1[A](inp: Array[A], left: Int, right: Int, a0: A, f: (A,A) => A): A
     var i = left
     while (i < right) {
         a = f(a, inp(i))
-        i = i+1
+        i = i + 1
     }
     a
 }
@@ -256,7 +268,7 @@ def scanLeftSeg[A](inp: Array[A], left: Int, right: Int, a0: A, f: (A,A) => A, o
         var i = left
         var a = a0
         while (i < right) {
-            a = f(a,inp(i))
+            a = f(a, inp(i))
             i = i+1
             out(i) = a
         }
