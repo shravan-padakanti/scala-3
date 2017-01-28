@@ -1,3 +1,5 @@
+### scanLeft
+
 Having seen parallel versions of [map](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-map()#parallel-map-of-an-array-producing-an-array) and [fold](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-fold()#parallel-reduce-of-a-tree) , we now examine parallel `scanLeft`.
 
 `scanLeft` produces a collection containing cumulative results of applying the operator going left to right.
@@ -5,14 +7,11 @@ Having seen parallel versions of [map](https://github.com/rohitvg/scala-parallel
 ```scala
 List(1,3,8).scanLeft(100)((acc,elem) => acc + elem) == List(100, 101, 104, 112)
 ```
-Thus, just like `foldLeft`, `scanLeft` scans from left and passes the accumulator to each element in the list. Note that in `foldLeft` we fold the list into a final value. Here the output is a list.
+Thus, just like `foldLeft`, `scanLeft` scans from left and passes the accumulator to each element in the list. Note that in `foldLeft` we fold the list into a final value. Here the output is a list as below:
 
-### scanLeft - meaning and properties
 ```scala
 List(a1, a2, a3).scanLeft(f)(a0) = List(b0, b1, b2, b3)
-```
-where
-```
+
 * b0 = a0
 * b1 = f(b0, a1)
 * b2 = f(b1, a2)
