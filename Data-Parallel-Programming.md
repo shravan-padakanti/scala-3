@@ -10,7 +10,9 @@ Next, we learn about the **data-parallel programming**: _A form of parallelizati
 
 The simplest form of data-parallel programming is the parallel `for` loop.
 
-Example: initializing the array values. The method takes in an array and an int, and writes the int to every array entry in parallel. All iterations of the loop are executed concurrently with each other.
+#### Example 1: initializing the array values. 
+
+The method takes in an array and an int, and writes the int to every array entry in parallel. All iterations of the loop are executed concurrently with each other.
 
 ```scala
 def initializeArray(xs: Array[Int])(v: Int): Unit = {
@@ -21,6 +23,20 @@ def initializeArray(xs: Array[Int])(v: Int): Unit = {
 ```
 
 The parallel for loop is not functional – it can only affect the program through side-effects. **As long as iterations of the parallel loop write to separate memory locations, the program is correct**. This is valid for our example.
+
+#### Example 2: Mandelbrot Set. 
+
+Mandelbrot Set is a set of _complex numbers_ in the plane for which the sequence: 
+
+Z<sup>n+1</sup> = Z<sup>2</sup><sub>n</sub> + c 
+
+does not approach infinity.
+
+Demo Summary:
+* task-parallel implementation – the slowest.
+* scala-parallel-collections - intermediate.
+* data-parallel implementation – about 2× faster.
+
 
 ### Workload
 
