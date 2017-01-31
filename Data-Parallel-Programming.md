@@ -43,7 +43,9 @@ Different data-parallel programs have different workloads.
 
 Workload is a function that maps each input element to the amount of work required to process it:
 
-* Uniform Workload: Defined by a constant function: `w(i) = const`. (Easy to parallelize)
-* Irregular Workload: Defined by an arbitrary function: `w(i) = f(i)`. 
+* Uniform Workload: Defined by a constant function: `w(i) = const`. (Easy to parallelize) - left image.
+* Irregular Workload: Defined by an arbitrary function: `w(i) = f(i)`  - right image.
+
+![workload_types](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/workload_types.png)
 
 The goal of the data parallel scheduler is to efficiently balance the workload across processors without necessarily having any knowledge about w(i). Thanks to the scheduler, the task of balancing the workload is shifted away from the programmer. This is one of the advantages of data parallel programming. 
