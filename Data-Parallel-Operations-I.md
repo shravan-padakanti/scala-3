@@ -17,4 +17,18 @@ def sum(xs: Array[Int]): Int = {
 ```
 **Question**: Does this implementation execute in parallel? Why not?
 
-**Answer**: 
+**Answer**: No. To see why not, we examine `foldLeft` more closely:
+
+```scala
+def foldLeft[B](z: B)(f: (B, A) => B): B
+```
+The accumulator is passed sequentially to each element. i.e. previous elements need to be updated before updating next elements. Hence this cannot be data-parallelized.
+
+### fold operation
+
+Next, let’s examine the fold signature:
+```scala
+def fold(z: A)(f: (A, A) => A): A
+```
+
+Unlike `foldLeft`, the `fold` operaion can process the elements in a reduction tree and so so it can execute in parallel.
