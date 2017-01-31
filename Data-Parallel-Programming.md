@@ -34,9 +34,8 @@ does not approach infinity.
 
 Demo Summary:
 * task-parallel implementation – the slowest.
-* scala-parallel-collections - intermediate.
-* data-parallel implementation – about 2× faster.
-
+* parallel for loop using scala-parallel-collections - intermediate.
+* parallel for loop using experimental data parallel scheduler – about 2× faster.
 
 ### Workload
 
@@ -44,7 +43,7 @@ Different data-parallel programs have different workloads.
 
 Workload is a function that maps each input element to the amount of work required to process it:
 
-* Uniform Workload: Defined by a constant function: `w(i) = const`
-* Irregular Workload: Defined by an arbitrary function: `w(i) = f(i)`
+* Uniform Workload: Defined by a constant function: `w(i) = const`. (Easy to parallelize)
+* Irregular Workload: Defined by an arbitrary function: `w(i) = f(i)`. 
 
-
+The goal of the data parallel scheduler is to efficiently balance the workload across processors without necessarily having any knowledge about w(i). Thanks to the scheduler, the task of balancing the workload is shifted away from the programmer. This is one of the advantages of data parallel programming. 
