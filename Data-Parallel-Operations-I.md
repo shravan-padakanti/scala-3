@@ -59,15 +59,17 @@ Given a list of "rock", "paper" and "scissors" strings, find out who won:
 Array("paper", "rock", "paper", "scissors").par.fold("")(play)
 
 def play(a: String, b: String): String = List(a, b).sorted match {
-    case List("paper", "scissors") => "scissors"
-    case List("paper", "rock") => "paper"
-    case List("rock", "scissors") => "rock"
-    case List(a, b) if a == b => a
-    case List("", b) => b
+    case List("paper", "scissors") => "scissors"  // scissors beats papers
+    case List("paper", "rock") => "paper"         // paper beats rock
+    case List("rock", "scissors") => "rock"       // rock beats scissors
+    case List(a, b) if a == b => a                // if users choose the same options
+    case List("", b) => b                         // if one option is empty
 }
 
-play(play("paper", "rock"), play("paper", "scissors")) == "scissors"
-play("paper", play("rock", play("paper", "scissors"))) == "paper"
+// usage
+
+play(play("paper", "rock"), play("paper", "scissors")) == "scissors" 
+play("paper", play("rock", play("paper", "scissors"))) == "paper"    // same play but reorganized. Hence different answer.
 ```
 Why does this happen? This is because the `play` operator is **commutative**, but not **associative**.
 
@@ -88,7 +90,7 @@ f(a, b) == f(b, a)
 
 Given an array of characters, use fold to return the vowel count:
 ```scala
-Array(‘E‘, ‘P‘, ‘F‘, ‘L‘).par.fold(0)((count, c) => if (isVowel(c)) count + 1 else count)
+Array('E', 'P', 'F', 'L').par.fold(0)((count, c) => if (isVowel(c)) count + 1 else count)
 ```
 
 Question:
@@ -101,6 +103,20 @@ What does this snippet do?
 * The program does not compile.
 
 **Answer**:
+The program does not compile. The signature of the fold operations says that the accumulator element must be the same type as the elements in the collection. Here elements are `char` but accumulator is an `int`. Also the fold operation can only produce values of the **same type** as the collection that it is called on, which is not the case here.
+
+
+On the other hand, the `foldLeft` is more expressive than `fold`. Sanity check:
+```scala
+def fold(z: A)(op: (A, A) => A): A = foldLeft[A][z](op)
+```
+
+> Extra reading: http://stackoverflow.com/questions/16111440/scala-fold-vs-foldleft
+> ```scala
+> def fold[A1 >: A](z: A1)(op: (A1, A1) => A1): A1
+> def foldLeft[B](z: B)(op: (B, A) => B): B
+> ```
+> This is the reason that `fold` can be implemented in parallel, while `foldLeft` cannot. This is not only because of the *Left part which implies that `foldLeft` goes from left to right sequentially, but also because the operator `op` cannot combine results computed in parallel -- it only defines how to combine the aggregation type `B` with the element type `A`, but not how to combine two aggregations of type `B`. The fold method, in turn, does define this, because the aggregation type `A1` has to be a supertype of the element type `A`, that is `A1 >: A`. This supertype relationship allows in the same time folding over the aggregation and elements, and combining aggregations -- both with a single operator.
 
 
 ## The aggregate Operation
@@ -109,12 +125,12 @@ Let’s examine the aggregate signature:
 ```scala
 def aggregate[B](z: B)(f: (B, A) => B, g: (B, B) => B): B
 ```
-A combination of foldLeft and fold.
+It is a combination of `foldLeft` and `fold`.
 
 Count the number of vowels in a character array using the `aggregate` method:
 
 ```scala
-Array(‘E‘, ‘P‘, ‘F‘, ‘L‘).par.aggregate(0)( (count, c) => if (isVowel(c)) count + 1 else count, _ + _ )
+Array('E', 'P', 'F', 'L').par.aggregate(0)( (count, c) => if (isVowel(c)) count + 1 else count, _ + _ )
 ```
 
 ## The Transformer Operations
