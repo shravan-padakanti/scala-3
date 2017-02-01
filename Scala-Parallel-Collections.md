@@ -135,7 +135,7 @@ So:
 In either case, program non-deterministically prints different results, or crashes.
 
 ## The TrieMap Collection
-`TrieMap` is an **exception **to these rules. This concurrent collection automatically creates atomic snapshots whenever a parallel operation starts. So concurrent updates are not observed during parallel traversals. 
+`TrieMap` is an **exception** to these rules. This concurrent collection automatically creates atomic snapshots whenever a parallel operation starts. So concurrent updates are not observed during parallel traversals. 
 
 The `snapshot` method (snapshots are taken in constant time i.e. `O(1)`) can be used to efficiently grab the current state:
 
@@ -148,3 +148,12 @@ val violation = graph.find({ case (i, v) => v != (i + 2) % graph.size })
 println(s"violation: $violation")
 ```
 This program runs correctly and does not print any violations.
+
+# Bottomline:
+
+Rules: 
+
+1. Avoid mutations to the same memory locations without proper synchronization.
+2. Never modify a parallel collection on which a data-parallel operation is in progress.
+    * Never write to a collection that is concurrently traversed
+    * Never read from a collection that is concurrently modified
