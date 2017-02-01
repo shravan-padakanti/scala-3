@@ -2,10 +2,10 @@
 
 We will study the following abstractions:
 
-1. Iterators
-2. Splitters
-3. Builders
-4. Combiners
+1. [Iterators](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners#1-iterators)
+2. [Splitters](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners#2-splitter)
+3. [Builders](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners#3-builder)
+4. [Combiners](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners#4-combiner)
 
 ### 1. Iterators
 
