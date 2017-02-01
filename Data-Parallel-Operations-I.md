@@ -48,12 +48,13 @@ def sum(xs: Array[Int]): Int = {
 Now we implement a `max` method also using `fold`:
 ```scala
 def max(xs: Array[Int]): Int = {
-    xs.par.fold(Int.MinValue)(math.max)
+    xs.par.fold(Int.MinValue)(math.max) // use the min-element as the neutral element, and max func for folding.
+    // We could have used: (x,y) => if (x>y) x else y instead of math.max
 }
 ```
 
 ### Preconditions of the fold Operation
-Given a list of ”paper”, ”rock” and ”scissors” strings, find out who won:
+Given a list of "rock", "paper" and "scissors" strings, find out who won:
 ```scala
 Array("paper", "rock", "paper", "scissors").par.fold("")(play)
 
