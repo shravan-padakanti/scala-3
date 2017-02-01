@@ -124,13 +124,18 @@ def fold(z: A)(op: (A, A) => A): A = foldLeft[A][z](op)
 Let’s examine the aggregate signature:
 ```scala
 def aggregate[B](z: B)(f: (B, A) => B, g: (B, B) => B): B
+// B is the folding type
+// z is the accumulator
+// f is the sequential folding operator
+// g is the parallel folding operator
 ```
-It is a combination of `foldLeft` and `fold`.
+Thus, as it uses a combination of sequential and parallel operators, It is a combination of `foldLeft` and `fold`.
 
-Count the number of vowels in a character array using the `aggregate` method:
+Revisiting our problem of counting the number of vowels in a character array using the `aggregate` method:
 
 ```scala
 Array('E', 'P', 'F', 'L').par.aggregate(0)( (count, c) => if (isVowel(c)) count + 1 else count, _ + _ )
+// the 0 (neutral element) and _ + _ (parallel reduction operator) form the monad.
 ```
 
 ## The Transformer Operations
