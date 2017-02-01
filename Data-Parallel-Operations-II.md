@@ -1,1 +1,0 @@
-Data Parallel Operations I
