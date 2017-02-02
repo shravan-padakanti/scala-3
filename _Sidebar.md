@@ -24,3 +24,11 @@
 * [Data Parallel Operations](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Parallel-Operations)
 * [Scala Parallel Collections](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Scala-Parallel-Collections)
 * [Splitters and Combiners](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners)
+
+**Week 4**
+
+* [Implementing Combiners]()
+* [Parallel Two-phase Construction]()
+* [Conc-tree Data Structure]()
+* [Amortized, Constant-time Append Operation]()
+* [Conc-Tree Combiners]()
