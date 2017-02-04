@@ -165,4 +165,4 @@ new <>(xs.left, nr)
 * O(n)
 * O(1)
 
-**Answer**: 
+**Answer**: Concatenation takes `O(h1 − h2)` time, where h1 and h2 are the heights of the two trees.
