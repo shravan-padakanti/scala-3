@@ -29,6 +29,6 @@
 
 * [Implementing Combiners](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Implementing-Combiners)
 * [Parallel Two-phase Construction](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Parallel-Two-phase-Construction)
-* [Conc-tree Data Structure]()
-* [Amortized, Constant-time Append Operation]()
-* [Conc-Tree Combiners]()
+* [Conc-tree Data Structure](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Conc-Trees-Data-Structure)
+* [Amortized, Constant-time Append Operation](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Amortized,-Constant-time-Append-Operation)
+* [Conc-Tree Combiners](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Conc-Tree-Combiners)
