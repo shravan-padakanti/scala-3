@@ -1,0 +1,1 @@
+Amortized, Constant-time Append Operation
