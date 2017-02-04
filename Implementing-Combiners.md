@@ -8,7 +8,7 @@ trait Builder[T, Repr] {
 }
 ```
 
-Combiners## 
+## Combiners
 ```scala
 trait Combiner[T, Repr] extends Builder[T, Repr] {
     def combine(that: Combiner[T, Repr]): Combiner[T, Repr]
