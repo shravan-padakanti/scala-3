@@ -1,3 +1,7 @@
+Here we will see how the combiners are implemented for various collections, and learn about data structures that are more amenable for parallel computations.
+
+We have seen Builders and Combiners in the [last lecture](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners): 
+
 ## Builders
 
 Builders are used in sequential collection methods:
