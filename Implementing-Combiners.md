@@ -74,3 +74,5 @@ Operation complexity for sequences can vary.
 
 Mutable linked list can have `O(1)` concatenation, but for most sequences, concatenation is `O(n)`.
 
+# Conclusion:
+This lecture should have convinced us that implementing combiners is not trivial. Since most of these data structures do not have an efficient concatenation or union, providing a combiner for the corresponding collections is not straight forward. In the next lecture, we will see that it is indeed possible to implement efficient combiners for this data structures, and we will study the techniques used to do this. 
