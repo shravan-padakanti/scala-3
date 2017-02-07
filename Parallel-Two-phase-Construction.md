@@ -2,6 +2,7 @@
 
 Most data structures can be constructed in parallel using **two-phase construction**.
 
+Previously we insisted that a combiner and the resulting collection have the **same** underlying data structure. For example, we assume that a combiner that produces an array must internally contain an array at the point when its combine method is called. 
 
 The intermediate data structure is a data structure that:
 
