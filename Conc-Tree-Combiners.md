@@ -20,6 +20,8 @@ The `+=` operation in most cases just adds an element to the chunk array:
 
 Occasionally, the `chunk` array becomes full, and needs to be expanded.
 
+The magic ingredient here is in the expand method which we will show shortly. To push the array into the Conc tree, we will introduce a new node type called Chunk. The Chunk class holds the array and a number of elements in it. 
+
 ## Chunk Nodes
 Chunk nodes are similar to Single nodes, but instead of a single element, they hold an array of elements.
 
