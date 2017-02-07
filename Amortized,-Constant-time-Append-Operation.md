@@ -36,6 +36,8 @@ This implementation breaks the `O(log n)` bound on the concatenation.
 
 ![const_time_appends](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/const_time_appends.png)
 
+The fundamental problem here is that we are essentially still building a link list with append nodes. So we need to link these notes more intelligently. In what follows, we will make sure that if the total number of elements in the tree is n, then there are never more than log n of append nodes in the data structure. 
+
 ### Counting in Binary Number System
 
 ![binary_counting](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/binary_counting.png)
