@@ -1,3 +1,5 @@
+In this lecture, we will study the **conc** data type, which is a parallel counterpart to functional **cons** list ([https://github.com/rohitvg/scala-principles-1/wiki/Polymorphism-(-Subtyping-and-Generics-)#basics](We have seen this before)) and is used to manipulate data. This will reveal a data structure with an efficient concatenation method. 
+
 ## List Data Type
 
 Let’s recall the list data type in functional programming.
@@ -18,7 +20,7 @@ case object Nil extends List[Nothing] {
 How do we implement a filter method on lists?
 
 ```scala
-def filter[T](lst: List[T])(p: T => Boolean): List[T] = lst match {
+def filter[T](list: List[T])(p: T => Boolean): List[T] = list match {
     case x :: xs if p(x) => x :: filter(xs)(p)
     case x :: xs => filter(xs)(p)
     case Nil => Nil
@@ -27,7 +29,7 @@ def filter[T](lst: List[T])(p: T => Boolean): List[T] = lst match {
 
 ## Trees
 
-Lists are built for sequential computations – they are traversed from left to right.
+Lists are built for sequential computations due to their recursive nature – they are traversed from left to right.
 
 Trees allow parallel computations – their subtrees can be traversed in parallel.
 
@@ -38,6 +40,7 @@ case class Node[T](left: Tree[T], right: Tree[T]) extends Tree[T]
 case class Leaf[T](elem: T) extends Tree[T]
 case object Empty extends Tree[Nothing]
 ```
+Node of T will represent internal nodes, which contain only two references to the left and the right subtree, but no concrete elements. instead elements will be contained in the leaf data type. The elements themselves are contained in the leaf, and the leaves are bound together with the node objects. (Eg. [Image over here](https://github.com/rohitvg/scala-principles-1/wiki/Collections-(Lists)))
 
 ### Filter on Trees
 
