@@ -2,6 +2,7 @@
 
 Most data structures can be constructed in parallel using **two-phase construction**.
 
+
 The intermediate data structure is a data structure that:
 
 * has an efficient `combine` method: `O(log n + log m)` or better
