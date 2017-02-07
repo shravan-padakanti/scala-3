@@ -7,8 +7,12 @@ Previously we insisted that a combiner and the resulting collection have the **s
 The intermediate data structure is a data structure that:
 
 * has an efficient `combine` method: `O(log n + log m)` or better
-* has an efficient `+=` method
-* can be converted to the resulting data structure in `O(n/P)` time
+* has an efficient `+=` method (thus individual processors can efficiently modify the data structure)
+* can be converted to the resulting data structure in `O(n/P)` time. n is the size of data structure, P is the no. of processors.
+
+These properties of the intermediate data structure allows us to build a parallel data structure in 2 phases. In the **first** phase, different processors build intermediate data structures in parallel by invoking the `+=` method.  These intermediate data structures are then combined in a parallel reduction tree until there is a single intermediate data structure at the root. In the **second** phase, the result method uses the intermediate data structure to create the final data structure in parallel.
+
+![two phase](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/intermediate_data_structure.png) 
 
 #### Example: Array Combiner
 
@@ -16,14 +20,18 @@ Let’s implement a combiner for arrays.
 
 Two arrays cannot be efficiently concatenated, so we will do a two-phase construction.
 
+To keep things simple, we will limit our ArrayCombiner class to reference objects, expressed with a time bound of the type parameter T. We also add the ClassTag context bound to be able to instantiate the resulting array and the parallelism level argument. Internally, the ArrayCombiner keeps the field numElems to store the number of elements in the combiner, and the nested ArrayBuffer used to store the elements. The actual elements will be stored in these entries. We use a nested ArrayBuffer instead of a normal one for reasons that should soon become apparent.
+
 ```scala
 class ArrayCombiner[T <: AnyRef: ClassTag](val parallelism: Int) {
     private var numElems = 0
     private val buffers = new ArrayBuffer[ArrayBuffer[T]]
     buffers += new ArrayBuffer[T]
 }
-
+```
 First, we implement the **+=** method:
+
+This method finds the last nested array buffer in buffers and appends the element x to it. If the last nested ArrayBuffer ever gets full, it is expanded to accommodate more elements. 
 
 ```scala
 def +=(x: T) = {
@@ -32,9 +40,11 @@ def +=(x: T) = {
     this
 }
 ```
-Amortized O(1), low constant factors – as efficient as an array buffer.
+Takes amortized O(1) with low constants – as efficient as an array buffer.
 
-Next, we implement the **combine** method:
+Next, we implement the **combine** method.
+
+The combine method simply copies the references of the argument combiners buffers to its own buffers field. It does not need to copy the actual contents of those nested buffers, only a pointer to them.
 
 ```scala
 def combine(that: ArrayCombiner[T]) = {
@@ -46,7 +56,9 @@ def combine(that: ArrayCombiner[T]) = {
 
 `O(P)`, assuming that buffers contains no more than `O(P)` nested array buffers.
 
-Finally, we implement the result method:
+Finally, we implement the result method.
+
+Once we have the root intermediate data structure, we know the required size of the array from the numElems field, so we allocate the resulting array. We then divide the array indices into chunks, pairs of starting and ending indices that each parallel task should in parallel copy. We start these tasks, wait for their completion, and then return the array. 
 
 ```scala
 def result: Array[T] = {
