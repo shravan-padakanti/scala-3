@@ -2,7 +2,7 @@ Here we will see how the combiners are implemented for various collections, and 
 
 So while the emphasis in the previous week was on data parallel APIs and parallel programming obstructions, this week's lecture will be more algorithmic in nature. It will give you an insight into how to pick the right data structure, and organize the data in a parallel program.
 
-Recall that a transformer operation is a collection operation that creates another collection instead of just a single value. Methods such as `filter`, `map`, `flatMap` and `groupBy` are examples of transformer operations. By contrast, methods, such as `fold`, `sum`, and `aggregate` are not transformer operations. 
+[Recall](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Data-Parallel-Operations#the-transformer-operations) that a transformer operation is a collection operation that creates another collection instead of just a single value. Methods such as `filter`, `map`, `flatMap` and `groupBy` are examples of transformer operations. By contrast, methods, such as `fold`, `sum`, and `aggregate` are not transformer operations. 
 
 We have seen Builders and Combiners in the [last lecture](https://github.com/rohitvg/scala-parallel-programming-3/wiki/Splitters-and-Combiners): 
 
