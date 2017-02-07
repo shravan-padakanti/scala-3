@@ -104,3 +104,5 @@ How can we implement combiners?
 2. An efficient concatenation or union operation: a preferred way when the resulting data structure allows this.
 3. Concurrent data structure – different combiners share the same
 underlying data structure, and rely on _synchronization_ to correctly update the data structure when `+=` is called.
+
+In the next lecture we focus on (2) i.e. an efficient concatenation or union operation.
