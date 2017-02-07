@@ -1,3 +1,5 @@
+In this lecture we will implement combiners based on conc-trees that we introduced in the previous lectures called conc-buffers.
+
 ## Conc Buffers
 
 The `ConcBuffer` appends elements into an array of size `k`. When the array gets full, it is stored into a `Chunk` node and added into the Conc-tree.
