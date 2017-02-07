@@ -17,6 +17,8 @@ trait Builder[T, Repr] {
 ```
 
 ## Combiners
+
+Builders are used in parallel collection methods:
 ```scala
 trait Combiner[T, Repr] extends Builder[T, Repr] {
     def combine(that: Combiner[T, Repr]): Combiner[T, Repr]
