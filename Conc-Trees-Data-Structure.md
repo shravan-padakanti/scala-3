@@ -53,23 +53,29 @@ def filter[T](t: Tree[T])(p: T => Boolean): Tree[T] = t match {
     case Empty => Empty
 }
 ```
+Suppose we filter for odd elements using the predicate `filter(_%2 = 1)`, apply it on tree in figure 1, then we get figure 2. i.e. tree with empty elements. We can reduce that to figure 3 by removing empty nodes. But unfortunately this tree is not suitable for parallel computations, as it is more like a list than a tree.
+
 ![filter_on_trees](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/filter_on_trees.png)
+
+Thus, **Trees are not good for parallelism unless they are balanced**.
 
 ## Conc Data Type
 
-**Trees are not good for parallelism unless they are balanced**.
+Thus, **Trees are not good for parallelism unless they are balanced**.
 
 Let’s devise a data type called **Conc**, which represents balanced trees:
 
 ```scala
 sealed trait Conc[+T] {
-    def level: Int
-    def size: Int
+    def level: Int          // height of the tree
+    def size: Int           // no. of elements
     def left: Conc[T]
     def right: Conc[T]
 }
 ```
 In parallel programming, this data type is known as the **conc-list** (introduced in the Fortress language).
+
+Here we see one of the implementation of this list.
 
 ### Conc Data Type
 
@@ -83,7 +89,7 @@ case object Empty extends Conc[Nothing] {
 
 class Single[T](val x: T) extends Conc[T] {
     def level = 0
-    def size = 1
+    def size = 1  
 }
 
 case class <>[T](left: Conc[T], right: Conc[T]) extends Conc[T] {
@@ -94,17 +100,18 @@ case class <>[T](left: Conc[T], right: Conc[T]) extends Conc[T] {
 
 ### Conc Data Type Invariants
 
-In addition, we will define the following invariants for Conc-trees:
+In addition, we will define the following invariants for Conc-trees so that they are balanced:
+
 1. A `<>` node can never contain `Empty` as its subtree.
 2. The level difference between the left and the right subtree of a `<>` node is always 1 or less.
 
 We will rely on these invariants to implement concatenation:
 
 ```scala
-def <>(that: Conc[T]): Conc[T] = {
+def <>(that: Conc[T]): Conc[T] = {     // conc constructor
     if (this == Empty) that
     else if (that == Empty) this
-    else concat(this, that)
+    else concat(this, that)            // re organizes tree so that the invariants are maintained
 }
 ```
 
@@ -121,6 +128,7 @@ def concat[T](xs: Conc[T], ys: Conc[T]): Conc[T] = {
     val diff = ys.level - xs.level
     if (diff >= -1 && diff <= 1) new <>(xs, ys)
     else if (diff < -1) {
+    //...
 ```
 
 Otherwise, let’s assume that the left tree is higher than the right one.
@@ -169,3 +177,6 @@ new <>(xs.left, nr)
 * O(1)
 
 **Answer**: Concatenation takes `O(h1 − h2)` time, where h1 and h2 are the heights of the two trees.
+
+
+In the next lecture, we will see how the core of this data structure can be used to implement more efficient combiners. 
