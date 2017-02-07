@@ -40,6 +40,10 @@ The fundamental problem here is that we are essentially still building a link li
 
 ### Counting in Binary Number System
 
+In the previous example, it is not incidental that we flipped exactly seven digits to get to the number 4. The second property is that a number n requires all of log n digits. If this were not the case it would be really hard to write big numbers. Here is a sanity check. Number 4 is written as 1 0 0. Number 8 is twice as large, but takes only an additional digit. Number 16 is again twice as large, and again requires only one more digit. So, while the number grows exponentially, the number of digits grows linearly. This is the same as saying that the number grows linearly, and the number of digits grows logarhythmically. 
+
+Now, observe that there is a correspondence between a digit at position k, and a contrary with level k. 
+
 ![binary_counting](https://github.com/rohitvg/scala-parallel-programming-3/blob/master/resources/images/binary_counting.png)
 
 * To count up to `n` in the binary number system, we need `O(n)` work.
