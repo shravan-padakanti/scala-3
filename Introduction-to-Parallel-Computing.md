@@ -36,6 +36,8 @@ Parallelism manifests itself at different granularity levels.
     ```
 * **task-level parallelism** – executing separate streams of instructions in parallel. 
 
+> Data parallelism vs. Task parallelism: https://en.wikipedia.org/wiki/Data_parallelism#Data_parallelism_vs._task_parallelism
+
 In this course, we focus on task-level parallelism.
 
 ## Classes of Parallel Computers
