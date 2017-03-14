@@ -6,6 +6,8 @@ We know how to express parallel programs with task and parallel constructs.
 
 Next, we learn about the **data-parallel programming**: _A form of parallelization that distributes **data** across computing nodes._
 
+> Data parallelism vs. Task parallelism: https://en.wikipedia.org/wiki/Data_parallelism#Data_parallelism_vs._task_parallelism
+
 ### Data-Parallel Programming Model
 
 The simplest form of data-parallel programming is the parallel `for` loop.
