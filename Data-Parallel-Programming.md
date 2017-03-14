@@ -6,7 +6,7 @@ We know how to express parallel programs with task and parallel constructs.
 
 Next, we learn about the **data-parallel programming**: _A form of parallelization that distributes **data** across computing nodes._
 
-> Synchronous vs. Asynchronous: http://stackoverflow.com/questions/748175/asynchronous-vs-synchronous-execution-what-does-it-really-mean
+> Synchronous vs. Asynchronous: http://stackoverflow.com/questions/748175/asynchronous-vs-synchronous-execution-what-does-it-really-mean <br/>
 > Data parallelism vs. Task parallelism: https://en.wikipedia.org/wiki/Data_parallelism#Data_parallelism_vs._task_parallelism
 
 ### Data-Parallel Programming Model
