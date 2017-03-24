@@ -9,7 +9,7 @@ However, some operations are not parallelizable.
 
 ## Non-Parallelizable Operations
 
-### fold operation
+### foldLeft operation
 
 **Task**: implement the method sum using the `foldLeft` method.
 ```scala
