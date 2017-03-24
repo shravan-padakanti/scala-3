@@ -1,3 +1,5 @@
+> This is also covered in the next course: https://github.com/rohitvg/scala-spark-4/wiki/Reduction-Operations-(fold,-foldLeft,-aggregate)
+
 **In Scala, most collection operations can become data-parallel**. The `.par` call converts a sequential collection to a parallel collection.
 
 ```scala
